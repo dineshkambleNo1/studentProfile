@@ -3,7 +3,9 @@ package com.example.StudentProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class StudentService {
@@ -12,30 +14,44 @@ public class StudentService {
     StudentRepository studentRepository;
 
     public void addStudent(Student student) {
-        studentRepository.saveStudent(student);
+        Student student1 = Student.builder()
+                .admNo(student.getAdmNo())
+                  .age(student.getAge())
+                    .branch(student.getBranch())
+                     .course(student.getCourse())
+                     .email(student.getEmail()).fathersName(student.getFathersName()).build();
+
+        studentRepository.save(student);
     }
 
-    public Student getStudentByName(String name) {
-        return  studentRepository.searchStudentByName(name);
-    }
-
-    public Student getStudentByAdmNo(int admNo) {
-        return studentRepository.searchStudent(admNo);
-    }
 
     public Student getStudentById(int id) {
-        return studentRepository.searchStudentById(id);
+        return studentRepository.findById(id).get();
     }
 
     public List<String> getAllStudents() {
-        return studentRepository.searchAllStudents();
+        List<Student> students = studentRepository.findAll();
+
+        List<String > listOfNames = new ArrayList<>();
+
+        for(Student student : students){
+
+            listOfNames.add(student.getName());
+
+        }
+
+        return listOfNames;
+
     }
 
     public void deleteStudentById(int id) {
-        studentRepository.deleteStudentById(id);
+        studentRepository.deleteById(id);
     }
 
-//    public Student getStudent(int admNo) {
-//        return studentRepository.searchStudent(admNo);
-//    }
+
+
+    public Student updateStudentDetails(Student student) {
+
+        return studentRepository.save(student);
+    }
 }

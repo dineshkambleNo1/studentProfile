@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("/student")
 public class StudentController {
 
 
@@ -16,34 +16,22 @@ public class StudentController {
     StudentService studentService;
 
 
+    // for creating new student
     @PostMapping("/add-student")
     public ResponseEntity<String> addStudent(@RequestBody Student student){
         studentService.addStudent(student);
         return new ResponseEntity<>("New student added successfully", HttpStatus.CREATED);
     }
 
-    @GetMapping("/get-student-by-id/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable int id){
+    // find  the student by id
+    @GetMapping("/get-student-by-id")
+    public ResponseEntity<Student> getStudentById(@RequestParam("id") int id){
         Student student = null;
         student = studentService.getStudentById(id);
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
-    @GetMapping("/get-student-by-name/{name}")
-    public ResponseEntity<Student> getStudentByName(@PathVariable String name){
-        Student student = null;
-        student = studentService.getStudentByName(name);
-        return new ResponseEntity<>(student, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/get-student-by-admNo/{admNo}")
-    public ResponseEntity<Student> getStudentByAdmNo(@PathVariable int admNo){
-        Student student = null;
-       student = studentService.getStudentByAdmNo(admNo);
-        return new ResponseEntity<>(student, HttpStatus.CREATED);
-    }
-
-
+    // get all the  students
     @GetMapping("/get-all-students")
     public ResponseEntity<List<String>> getAllStudents(){
         List<String> students = null; // Assign list of student by calling service layer method
@@ -51,17 +39,16 @@ public class StudentController {
         return new ResponseEntity<>(students, HttpStatus.CREATED);
     }
 
-    //get student grouped by course
-
-    //get student grouped by branch
-
     // update
 
+    @PutMapping("/update-student-details")
+    public Student updateStudentDetails(@RequestBody Student student,@RequestParam("id") int id){
+        return studentService.updateStudentDetails(student);
+    }
 
-    //or delete
-
+    // delete the student by id
     @DeleteMapping("/delete-student-by-id")
-    public ResponseEntity<String> deleteStudentById(@RequestParam int id){
+    public ResponseEntity<String> deleteStudentById(@RequestParam("id") int id){
         studentService.deleteStudentById(id);
         return new ResponseEntity<>(id+ " removed successfully", HttpStatus.CREATED);
     }
